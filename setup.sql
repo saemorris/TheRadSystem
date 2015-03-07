@@ -83,26 +83,3 @@ CREATE TABLE pacs_images (
    FOREIGN KEY(record_id) REFERENCES radiology_record
 );
 
-
-grant all on family_doctor to semorris;
-grant all on pacs_images to semorris;
-grant all on radiology_record to semorris;
-grant all on users to semorris;
-grant all on persons to semorris;
-
-grant all on family_doctor to vanbelle;
-grant all on pacs_images to vanbelle;
-grant all on radiology_record to vanbelle;
-grant all on users to vanbelle;
-grant all on persons to vanbelle;
-
-grant all on family_doctor to tmeleshk;
-grant all on pacs_images to tmeleshk;
-grant all on radiology_record to tmeleshk;
-grant all on users to tmeleshk;
-grant all on persons to tmeleshk;
-
-/* Use:
- *	ALTER SESSION SET current_schema = tmeleshk 
- * to use these tables.
- */
