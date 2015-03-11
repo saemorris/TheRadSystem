@@ -1,13 +1,13 @@
-<html>
-	<body>
-		<h1>Test: <?php echo date(r); ?></h1>
-		<p>Your Browser Info:<br/>
-			<?php
-				echo $_SERVER['HTTP_USER_AGENT'] . "\n\n";
+<?php require('session.php'); ?>
 
-				$browser = get_browser(null, true);
-				print_r($browser); ?>
-		</p>
-		<?php include('checkcookie.php'); ?>
-	</body>
+<html>
+    <body>
+        <h1>
+            Success!
+        </h1>
+        <p>
+            If you can read this after signing in, logging in works.
+        </p>
+        <p><a href="logout.php">Log out</a></p>
+    </body>
 </html>
