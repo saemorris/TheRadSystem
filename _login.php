@@ -1,15 +1,15 @@
 <?php
 session_start();
-require('_sessioninfo.php');
+require ('_sessioninfo.php');
 
 function redirect() {
-    header("Location: index.php");
-    exit();
+	header("Location: index.php");
+	exit();
 }
 
 if (!isExpired()) {
-    // Session is valid
-    redirect();
+	// Session is valid
+	redirect();
 }
 
 $user = 'admin';
@@ -17,35 +17,55 @@ $pass = 'pass';
 // Check for submission post
 // http://www.formget.com/login-form-in-php/
 if (isset($_POST['login'])) {
-    // Missing fields
-    if (empty($_POST['user']) || empty($_POST['pass'])) {
-        $message="Invalid username/password";
-        $msg_class='error';
-    } else {
-        // FIXME Valid credentials
-        // database.select(user_name where user_name = $user and password = $pass)
-        if ($_POST['user'] == $user && $_POST['pass'] == $pass) {
-            // Credentials valid. Create info
-            $_SESSION['_user_session'] = true;
-            $_SESSION['us_created_time'] = time();
-            $_SESSION['us_last_activity'] = time();
-            
-            // Redirect to home page
-            redirect();
-        } else {
-            $message='Incorrect username/password';
-            $msg_class='error';
-        }
-    }
+	// Missing fields
+	if (empty($_POST['user']) || empty($_POST['pass'])) {
+		$message = "Invalid username/password";
+		$msg_class = 'error';
+	} else {
+		// Require a connection to the database.
+		require ('_database.php');
+		$user = $_POST['user'];
+		$pass = $_POST['pass'];
+		// <-- Bad.
+
+		$query = "SELECT user_name, password FROM users WHERE user_name = '$user' AND password = '$pass'";
+		$statement = oci_parse($connection, $query);
+
+		$results = oci_execute($statement);
+
+		// Did we get a valid result?
+		if ($results) {
+			// Are credentials valid?
+			if (oci_fetch($statement)) {
+				// Yes.
+				// Create session and redirect
+				$_SESSION['_user_session'] = true;
+				$_SESSION['us_created_time'] = time();
+				$_SESSION['us_last_activity'] = time();
+
+				// Redirect to home page
+				redirect();
+			} else {
+				// No.
+				// Inform the user
+				$message = 'Incorrect username/password';
+				$msg_class = 'error';
+			}
+
+		} else {
+			$message = 'Database error. Please try again later.';
+			$msg_class = 'error';
+		}
+	}
 } else {
-    // Check if we received info about the error
-    if (isset($_SESSION['err_message'])) {
-        $message = $_SESSION['err_message'];
-        $msg_class='error';
-        unset($_SESSION['err_message']);
-    } else {
-        $message='Login is required.';
-        $msg_class='normal';
-    }
+	// Check if we received info about the error
+	if (isset($_SESSION['err_message'])) {
+		$message = $_SESSION['err_message'];
+		$msg_class = 'error';
+		unset($_SESSION['err_message']);
+	} else {
+		$message = 'Login is required.';
+		$msg_class = 'normal';
+	}
 }
 ?>
