@@ -12,8 +12,6 @@ if (!isExpired()) {
 	redirect();
 }
 
-$user = 'admin';
-$pass = 'pass';
 // Check for submission post
 // http://www.formget.com/login-form-in-php/
 if (isset($_POST['login'])) {
@@ -28,7 +26,7 @@ if (isset($_POST['login'])) {
 		$pass = $_POST['pass'];
 		// <-- Bad.
 
-		$query = "SELECT user_name, password FROM users WHERE user_name = '$user' AND password = '$pass'";
+		$query = "SELECT user_name, class, person_id FROM users WHERE user_name = '$user' AND password = '$pass'";
 		$statement = oci_parse($connection, $query);
 
 		$results = oci_execute($statement);
@@ -38,15 +36,28 @@ if (isset($_POST['login'])) {
 			// Are credentials valid?
 			if (oci_fetch($statement)) {
 				// Yes.
+				// Store user details in the session
+				$_SESSION['user_name'] = oci_result($statement, 'user_name');
+				$_SESSION['class'] = oci_result($statement, 'class');
+				$_SESSION['person_id'] = oci_result($statement, 'person_id');
+				
 				// Create session and redirect
 				$_SESSION['_user_session'] = true;
 				$_SESSION['us_created_time'] = time();
 				$_SESSION['us_last_activity'] = time();
 
+				// Clean up database objects
+				oci_free_statement($statement);
+				oci_close($connection);
+
 				// Redirect to home page
 				redirect();
 			} else {
 				// No.
+				// Clean up database objects
+				oci_free_statement($statement);
+				oci_close($connection);
+				
 				// Inform the user
 				$message = 'Incorrect username/password';
 				$msg_class = 'error';
@@ -55,6 +66,10 @@ if (isset($_POST['login'])) {
 		} else {
 			$message = 'Database error. Please try again later.';
 			$msg_class = 'error';
+			
+			// Clean up database objects
+			oci_free_statement($statement);
+			oci_close($connection);
 		}
 	}
 } else {

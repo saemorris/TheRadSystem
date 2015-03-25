@@ -23,6 +23,14 @@ if (!isset($_SESSION['_user_session'])) {
 updateActiveTime();
 
 // Expose some useful functions for fellow programmers
-
+function getUserName() {
+	return $_SESSION['user_name'];
+}
+function getUserClass() {
+	return $_SESSION['class'];
+}
+function getUserPersonID() {
+	return $_SESSION['person_id'];
+}
 
 ?>
