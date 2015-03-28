@@ -26,3 +26,8 @@ insert into family_doctor values(444444, 999999);
 
 insert into radiology_record values(1, 777777, 111111, 222222, 'intuition', to_date('1982-09-27', 'YYYY-MM-DD'), to_date('1982-10-28', 'YYYY-MM-DD'), 'broken arm bone', 'remove all the bones in that arm');
 insert into radiology_record values(2, 999999, 444444, 333333, 'science', to_date('2002-10-31', 'YYYY-MM-DD'), to_date('2002-11-12', 'YYYY-MM-DD'), 'broken leg', 'splint the bone');
+
+
+CREATE INDEX descriptionIndex ON radiology_record(description) INDEXTYPE IS CTXSYS.CONTENT;
+
+CREATE INDEX diagnosisIndex ON radiology_record(diagnosis) INDEXTYPE IS CTXSYS.CONTENT;
