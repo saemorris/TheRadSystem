@@ -27,8 +27,8 @@ if (isset($_POST['login'])) {
 		// <-- Bad.
 
 		$query = "SELECT user_name, class, person_id FROM users WHERE user_name = '$user' AND password = '$pass'";
+		
 		$statement = oci_parse($connection, $query);
-
 		$results = oci_execute($statement);
 
 		// Did we get a valid result?
