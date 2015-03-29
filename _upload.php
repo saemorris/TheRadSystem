@@ -18,14 +18,16 @@ if (isset($_POST['upload'])) {
 		$test_type = $_POST['test_type'];
 		$prescribing_date = $_POST['prescribing_date'];
 		$test_date = $_POST['test_date'];
-		$diagnosis = $_POST['disagnosis'];
+		$diagnosis = $_POST['diagnosis'];
 		$description = $_POST['description'];
 		
 		echo $record_id;
 		echo $patient_id;
 		echo $doctor_id;
-		echo radiologist_id;
+		echo $radiologist_id;
 		echo $test_type;
+		echo $prescribing_date;
+		echo $test_date;
 		echo $diagnosis;
 		echo $description;
 		

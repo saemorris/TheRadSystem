@@ -55,6 +55,9 @@
 						</td>
 					</tr></div>
 				</table>
+				<?php
+					require('upload.php');
+				?>
             </form>
         </div>
                 	
