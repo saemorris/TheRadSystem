@@ -85,7 +85,7 @@ if (isset($_POST['search'])) {
 			// get the number of fields in the table
 			$numCols = oci_num_fields($statement);
 			
-			// display the results
+			// display the results 
 			echo "<table border='1' cellspacing=0>";
 				
 			// display column headers
@@ -97,8 +97,16 @@ if (isset($_POST['search'])) {
 			}
 			echo "</tr>";
 			
-			foreach ($words as $word) {
-				$query="SELECT * FROM radiology_record WHERE CONTAINS(description, '$word', 1) > 0 OR CONTAINS(diagnosis, '$word', 2) > 0";
+				$query="SELECT * FROM radiology_record WHERE ";
+				$i=1;
+				foreach ($words as $word) {
+					$query .= "CONTAINS(description, '$word', $i) > 0 OR ";
+					$i = $i+1;
+					$query .= "CONTAINS(diagnosis, '$word', $i) > 0 OR ";
+					$i = $i+1;
+				}
+				$query = substr_replace($query, '', -3, 2);
+				//$query="SELECT * FROM radiology_record WHERE CONTAINS(description, '$word', 1) > 0 OR CONTAINS(diagnosis, '$word', 2) > 0";
 				
 				$statement = oci_parse($connection, $query);
 	
@@ -111,7 +119,6 @@ if (isset($_POST['search'])) {
 						echo "<td>" . ($item !== null ? htmlentities($item, ENT_QUOTES) : "&nbsp;") . "</td>";
 					}
 					echo "</tr>";
-				}
 			}
 			echo "</table>";
 			
