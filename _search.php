@@ -76,16 +76,7 @@ if (isset($_POST['search'])) {
 			}
 			echo "<p>";
 			
-			$query="SELECT * FROM radiology_record";
-			
-			$statement = oci_parse($connection, $query);
-			
-			$results = oci_execute($statement);
-	
-			// get the number of fields in the table
-			$numCols = oci_num_fields($statement);
-			
-			// display the results 
+			// display the headers of the table 
 			echo "<table border='1' cellspacing=0>";
 				
 			// display column headers
@@ -102,40 +93,35 @@ if (isset($_POST['search'])) {
 			echo "<th>Test Date</th>";
 			echo "<th>Diagnosis</th>";
 			echo "<th>Description</th>";			
-			//for ($i = 1; $i <= $numCols; $i++) {
-				//$column_name = oci_field_name($statement, $i);
-					
-				//echo"<th>$column_name</th>";
-			//}
 			echo "</tr>";
 			
-				$query="SELECT record_id, patient_id, person_id, first_name, last_name, doctor_id, 
-					radiologist_id, test_type, prescribing_date, test_date, diagnosis, description
-					FROM radiology_record r, persons p WHERE r.patient_id = p.person_id AND (";
-				$i=1;
-				foreach ($words as $word) {
-					$query .= "CONTAINS(description, '$word', $i) > 0 OR ";
-					$i = $i+1;
-					$query .= "CONTAINS(diagnosis, '$word', $i) > 0 OR ";
-					$i = $i+1;
-					$query .= "CONTAINS(first_name, '$word', $i) > 0 OR ";
-					$i = $i + 1;
-					$query .= "CONTAINS(last_name, '$word', $i) > 0 OR ";
-					$i = $i + 1;
+			$query="SELECT record_id, patient_id, person_id, first_name, last_name, doctor_id, 
+				radiologist_id, test_type, prescribing_date, test_date, diagnosis, description
+				FROM radiology_record r, persons p WHERE r.patient_id = p.person_id AND (";
+			$i=1;
+			foreach ($words as $word) {
+				$query .= "CONTAINS(description, '$word', $i) > 0 OR ";
+				$i = $i+1;
+				$query .= "CONTAINS(diagnosis, '$word', $i) > 0 OR ";
+				$i = $i+1;
+				$query .= "CONTAINS(first_name, '$word', $i) > 0 OR ";
+				$i = $i + 1;
+				$query .= "CONTAINS(last_name, '$word', $i) > 0 OR ";
+				$i = $i + 1;
+			}
+			$query = substr_replace($query, '', -3, 2);
+			$query .= ") ORDER BY SCORE(1)";
+			$statement = oci_parse($connection, $query);
+
+			$results = oci_execute($statement);
+			
+			// display the rows found with matching keywords
+			while ($row = oci_fetch_array($statement, OCI_ASSOC+OCI_RETURNS_NULLS)) {
+				echo "<tr>";
+				foreach($row as $item) {
+					echo "<td>" . ($item !== null ? htmlentities($item, ENT_QUOTES) : "&nbsp;") . "</td>";
 				}
-				$query = substr_replace($query, '', -3, 2);
-				$query .= ") ORDER BY SCORE(1)";
-				$statement = oci_parse($connection, $query);
-	
-				$results = oci_execute($statement);
-				
-				// display the rows found with matching keywords
-				while ($row = oci_fetch_array($statement, OCI_ASSOC+OCI_RETURNS_NULLS)) {
-					echo "<tr>";
-					foreach($row as $item) {
-						echo "<td>" . ($item !== null ? htmlentities($item, ENT_QUOTES) : "&nbsp;") . "</td>";
-					}
-					echo "</tr>";
+				echo "</tr>";
 			}
 			echo "</table>";
 			
