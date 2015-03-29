@@ -6,7 +6,6 @@
         <link rel="stylesheet" href="searchpage.css">
         
         <form id="search" action="search.php" method="post">
-        	<!--<div id="container"> -->
 	        	
 	        	<div id="dateRangeSearch">
 	        		<p class="header">Search by Date Range</p>	
@@ -51,7 +50,6 @@
 				<div style="clear:both"</div>
 	        	  	
 			<hr>
-        	<!--</div> -->
         </form>
     </head>
     <body>
