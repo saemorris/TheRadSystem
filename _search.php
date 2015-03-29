@@ -17,8 +17,16 @@ if (isset($_POST['search'])) {
 			// query the database for records in the specified date range	
 			$startDate = $_POST['dateQueryFrom'];
 			$endDate = $_POST['dateQueryTo'];
-			$query="SELECT * FROM radiology_record WHERE prescribing_date BETWEEN to_date('$startDate', 'YYYY-MM-DD') and to_date('$endDate', 'YYYY-MM-DD')
-				OR test_date BETWEEN to_date('$startDate', 'YYYY-MM-DD') and to_date('$endDate', 'YYYY-MM-DD')";
+			$query="SELECT record_id, patient_id, person_id, first_name, last_name, doctor_id, radiologist_id,
+				test_type, prescribing_date, test_date, diagnosis, description
+				FROM radiology_record, persons WHERE patient_id = person_id AND ((prescribing_date BETWEEN
+				to_date('$startDate', 'YYYY-MM-DD') AND to_date('$endDate', 'YYYY-MM-DD'))
+				OR (test_date BETWEEN to_date('$startDate', 'YYYY-MM-DD') AND to_date('$endDate', 'YYYY-MM-DD')))";
+			
+			//display what was searched for
+			echo "<b>Search results for: </b>"; 
+			echo $startDate . " to " . $endDate;
+			echo "<p>";
 			
 			$statement = oci_parse($connection, $query);
 
