@@ -1,6 +1,5 @@
 <?php
 
-
 // check for submission post
 if (isset($_POST['upload'])) {
 	// missing fields
@@ -21,16 +20,6 @@ if (isset($_POST['upload'])) {
 		$diagnosis = $_POST['diagnosis'];
 		$description = $_POST['description'];
 		
-		echo $record_id;
-		echo $patient_id;
-		echo $doctor_id;
-		echo $radiologist_id;
-		echo $test_type;
-		echo $prescribing_date;
-		echo $test_date;
-		echo $diagnosis;
-		echo $description;
-		
 		$query="INSERT INTO radiology_record VALUES(record_id_seq.nextval, '$patient_id', '$doctor_id', '$radiologist_id',
 			'$test_type', to_date('$prescribing_date', 'YYYY-MM-DD'), to_date('$test_date', 'YYYY-MM-DD'), 
 			'$diagnosis', '$description')";
@@ -38,7 +27,9 @@ if (isset($_POST['upload'])) {
 		$statement = oci_parse($connection, $query);
 
 		$results = oci_execute($statement);
-			
+		
+		// upload an image for the record that was uploaded	
+		require("upload.php");
 	}
 }
 

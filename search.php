@@ -1,3 +1,6 @@
+<?php
+require_once('session.php');
+?>
 
 <!DOCTYPE html>
 <html>
@@ -5,6 +8,12 @@
         <title>Search </title>
         <link rel="stylesheet" href="searchpage.css">
         
+        <!-- if the user is an admin, give them the optin to upload a record -->
+        <?php if (getUserClass() == "r") { ?>
+        		<a href="uploadRecord.php">Upload Record</a>
+        <?php } ?>
+        
+        <a href="logout.php">Logout</a>
         <form id="search" action="search.php" method="post">
 	        	
 	        	<div id="dateRangeSearch">
