@@ -31,7 +31,7 @@ if (isset($_POST['upload'])) {
 		echo $diagnosis;
 		echo $description;
 		
-		$query="INSERT INTO radiology_record VALUES('$record_id', '$patient_id', '$doctor_id', '$radiologist_id',
+		$query="INSERT INTO radiology_record VALUES(record_id_seq.nextval, '$patient_id', '$doctor_id', '$radiologist_id',
 			'$test_type', to_date('$prescribing_date', 'YYYY-MM-DD'), to_date('$test_date', 'YYYY-MM-DD'), 
 			'$diagnosis', '$description')";
 		

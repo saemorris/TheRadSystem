@@ -14,10 +14,6 @@
                 </div>
                 <table>
                     <tr>
-                        <td class="prompt_field">Record Id:</td>
-                        <td class="field"><input type="text" name="record_id" /></td>
-                    </tr>
-                    <tr>
                         <td class="prompt_field">Patient Id:</td>
                         <td class="field"><input type="text" name="patient_id" /></td>
                     </tr>
