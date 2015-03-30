@@ -1,2 +1,2 @@
 #!/bin/bash
-chmod o+r *.php *.html *.css *.js
+chmod o+r *.php *.css *.js

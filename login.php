@@ -28,8 +28,14 @@ require('_login.php');
                         <td class="prompt_field">Password:</td>
                         <td class="field"><input type="password" name="pass" /></td>
                     </tr>
-                </table>
-                <div id="submit"><input type="submit" name="login" value="Login"/></div>
+                    <div id="submit">
+					<tr>
+						<td/>
+						<td>
+							<input type="submit" name="login" value="Login"/>
+						</td>
+					</tr></div>
+				</table>
             </form>
         </div>
     </body>
