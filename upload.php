@@ -14,7 +14,7 @@ $uploadHandler = 'http://' . $_SERVER['HTTP_HOST'] . $directory_self . 'uploadPr
     <head> 
         <meta http-equiv="content-type" content="text/html; charset=iso-8859-1"> 
      
-        <link rel="stylesheet" type="text/css" href="UploadStyleSheet.css"> 
+        <link rel="stylesheet" type="text/css" href="uploadstylesheet.css"> 
          
         <title>Upload DICOM Image</title> 
      
@@ -22,7 +22,7 @@ $uploadHandler = 'http://' . $_SERVER['HTTP_HOST'] . $directory_self . 'uploadPr
      
     <body> 
      
-    <form id="Upload" action="<?php echo $uploadHandler ?>" enctype="multipart/form-data" method="post"> 
+    <form id="Upload" action="uploadProcessor.php" enctype="multipart/form-data" method="post"> 
      
         <h1> 
             Upload a DICOM image 
@@ -30,7 +30,7 @@ $uploadHandler = 'http://' . $_SERVER['HTTP_HOST'] . $directory_self . 'uploadPr
          
         <p> 
             <label for="file">File to upload:</label> 
-            <input id="file" type="file" name="file"> 
+            <input id="file" type="file" name="image_file"> 
         </p> 
                  
         <p> 
