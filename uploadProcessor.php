@@ -49,14 +49,51 @@ while(file_exists($uploadFilename = $uploadsDirectory.$now.'-'.$_FILES[$fieldnam
 { 
     $now++; 
 } 
+echo $_FILES[$fieldname]['name'];
+//require a connection to the database
+require ('_database.php');
+
+//$image = addslashes(file_get_contents("starfish.jpeg"));
+
+$query="INSERT INTO pacs_images (record_id, image_id, regular_size) VALUES (1,5 , EMPTY_BLOB()) 
+	RETURNING regular_size INTO :image";
+
+$statement = oci_parse($connection, $query);
+
+// Creates an "empty" OCI-Lob object to bind to the locator
+$image = oci_new_descriptor($connection, OCI_D_LOB);
+
+// Bind the returned Oracle LOB locator to the PHP LOB object
+oci_bind_by_name($statement, ":image", $image, -1, OCI_B_BLOB);
+
+// Execute the statement using , OCI_DEFAULT - as a transaction
+oci_execute($statement)
+    or die ("Unable to execute query\n");
+	
+
+
+//$results = oci_execute($statement);
+
+// Clean up database objects
+oci_free_statement($statement);
+oci_close($connection);
+
+
+// display the picture that was uploaded
+$query = "SELECT regular_size from pacs_images WHERE image_id = 5";
+$rs = fbsql_query($query, $connection);
+$row_data = fbsql_fetch_row($rs);
+fbsql_free_results($rs);
+
+echo "<img src=" . $row_data[0] . "/>";
 
 // now let's move the file to its final location and allocate the new filename to it 
-@move_uploaded_file($_FILES[$fieldname]['tmp_name'], $uploadFilename) 
-    or error('receiving directory insuffiecient permission', $uploadForm); 
+//@move_uploaded_file($_FILES[$fieldname]['tmp_name'], $uploadFilename) 
+//   or error('receiving directory insuffiecient permission', $uploadForm); 
      
 // If you got this far, everything has worked and the file has been successfully saved. 
 // We are now going to redirect the client to a success page. 
-header('Location: ' . $uploadSuccess); 
+//header('Location: ' . $uploadSuccess); 
 
 // The following function is an error handler which is used 
 // to output an HTML error page if the file upload fails 
