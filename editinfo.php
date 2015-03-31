@@ -127,6 +127,8 @@ if (isset($_POST['changeinfo'])) {
 				</table>
 			</form>
 			
+			<p><a href="account.php">&lt; Back</a></p>
+			
 		<?php } else {
 				echo "<p>Database state error: Unable to find user info</p>";
 				}
