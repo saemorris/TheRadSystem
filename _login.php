@@ -37,9 +37,9 @@ if (isset($_POST['login'])) {
 			if (oci_fetch($statement)) {
 				// Yes.
 				// Store user details in the session
-				$_SESSION['user_name'] = oci_result($statement, 'user_name');
-				$_SESSION['class'] = oci_result($statement, 'class');
-				$_SESSION['person_id'] = oci_result($statement, 'person_id');
+				$_SESSION['user_name'] = oci_result($statement, 'USER_NAME');
+				$_SESSION['class'] = oci_result($statement, 'CLASS');
+				$_SESSION['person_id'] = oci_result($statement, 'PERSON_ID');
 				
 				// Create session and redirect
 				$_SESSION['_user_session'] = true;

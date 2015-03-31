@@ -6,18 +6,30 @@ function show_message(message) {
 	msg.value = message;
 	msg.hidden = false;
 }
+
 // Set a function to onSubmit
 function validateInput(form) {
 	var mfields = document.getElementsByTagName("input");
 	var field;
-	for (i=0; i < mfields.length; i++) {
+	for ( i = 0; i < mfields.length; i++) {
 		field = mfields[i];
-		if (field.getAttribute("assertion") != null && 
-	field.getAttribute("assertion").search("not_blank")>=0) {
+		if (field.getAttribute("assertion") != null && field.getAttribute("assertion").search("not_blank") >= 0) {
 			if (field.value == "" || field.value == null) {
-				show_message("Field '"+field.name+"' cannot be left blank.");
+				show_message("Field '" + field.name.replace("_", " ") + "' cannot be left blank.");
 				return false;
 			}
+		}
+	}
+}
+
+function autofilter(form) {
+	var mfields = document.getElementsByTagName("input");
+	var field;
+	for ( i = 0; i < mfields.length; i++) {
+		field = mfields[i];
+		if (field.getAttribute("filter") != null) {
+			var regex = field.getAttribute("filter");
+			field.value = field.value.replace(RegExp(regex, 'g'), '');
 		}
 	}
 }

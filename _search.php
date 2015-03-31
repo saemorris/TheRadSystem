@@ -1,5 +1,4 @@
 <?php
-require ('session.php');
 
 // check for submission post
 if (isset($_POST['search'])) {
