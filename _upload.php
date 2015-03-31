@@ -29,7 +29,7 @@ if (isset($_POST['upload'])) {
 		$results = oci_execute($statement);
 		
 		// upload an image for the record that was uploaded	
-		require("upload.php");
+		require("uploadImage.php");
 	}
 }
 

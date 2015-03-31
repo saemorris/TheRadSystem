@@ -5,14 +5,22 @@
 // make a note of the current working directory, relative to root. 
 $directory_self = str_replace(basename($_SERVER['PHP_SELF']), '', $_SERVER['PHP_SELF']); 
 
+echo $directory_self . "<p>";
+
 // make a note of the directory that will recieve the uploaded file 
 $uploadsDirectory = $_SERVER['DOCUMENT_ROOT'] . $directory_self . 'uploaded_files/'; 
 
+echo $uploadsDirectory . "<p>";
+
 // make a note of the location of the upload form in case we need it 
-$uploadForm = 'http://' . $_SERVER['HTTP_HOST'] . $directory_self . 'upload.form.php'; 
+$uploadForm = 'http://' . $_SERVER['HTTP_HOST'] . $directory_self . 'uploadImage.php'; 
+
+echo $uploadForm . "<p>";
 
 // make a note of the location of the success page 
 $uploadSuccess = 'http://' . $_SERVER['HTTP_HOST'] . $directory_self . 'uploadSuccess.php'; 
+
+echo $uploadSuccess . "<p>";
 
 // fieldname used within the file <input> of the HTML form 
 $filename = 'image_file'; 
@@ -50,7 +58,7 @@ while(file_exists($uploadFilename = $uploadsDirectory.$now.'-'.$_FILES[$filename
     $now++; 
 } 
 
-echo $_FILES[$filename]['name'];
+echo "uploadFileName: " . $uploadFilename . "<p>";
 
 //require a connection to the database
 require ('_database.php');
@@ -70,7 +78,9 @@ oci_bind_by_name($statement, ":image", $image_lob, -1, OCI_B_BLOB);
 
 // Execute the statement using , OCI_DEFAULT - as a transaction
 oci_execute($statement, OCI_DEFAULT) or die ("Unable to execute query\n");
-	
+
+echo "filename: " . $_FILES[$filename]['name'] . "<p>";
+
 if($image_lob->savefile($_FILES[$filename]['name'])) {
 	oci_commit($connection);
 	echo "image successfully uploaded";
@@ -78,6 +88,9 @@ if($image_lob->savefile($_FILES[$filename]['name'])) {
 	echo "Couldn't upload image";
 }
 
+echo "<img src='displayImage.php?id=61' />";
+
+/*
 // display the picture that was uploaded
 $query = "SELECT regular_size from pacs_images WHERE image_id = 9";
 $statement = oci_parse($connection, $query);
@@ -89,14 +102,24 @@ if(!$row_data[0]) {
 } else {
 	$image = $row_data[0]->load();
 }
-
+*/
+/*
 $temp = tmpfile();
 $meta = stream_get_meta_data($temp);
 $tmpName = $meta['uri'];
 fwrite($temp, $image);
 fclose($temp);
 
-echo "<img src=" . $tmpName . "/>";
+echo "<img src=" . $tmpName . "/>"; */
+/*
+$img = imagecreate(100,100); //Create an image 100px x 100px
+imagecolorallocate($img, 255,0,0); //Fill the image red
+header('Content-type: image/jpeg'); //Set the content type to image/jpg
+imagejpeg($img); //Output the iamge
+imagedestroy($img); //Destroy the image
+
+echo "<img src='image.php' />";
+*/
 
 // Clean up database objects
 oci_free_statement($statement);
