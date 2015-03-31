@@ -9,30 +9,34 @@ if (isset($_POST['changepass'])) {
 	$confirmpass = $_POST['confirmpass'];
 
 	if ($newpass == $confirmpass) {
-		require ('_database.php');
-		// Try to change the password
-		$query = "UPDATE users SET password = :newpass WHERE user_name = :username AND password = :oldpass";
-		
-		// Parse the statement...
-		$statement = oci_parse($connection, $query);
-		// ...then bind names dynamically so that users can't inject data
-		oci_bind_by_name($statement, ":newpass", $newpass);
-		oci_bind_by_name($statement, ":oldpass", $oldpass);
-		oci_bind_by_name($statement, ":username", getUserName());
-		
-		if (oci_execute($statement)) {
-			// If a row was edited (should only be 1 since user_name is PK)
-			if (oci_num_rows($statement) > 0) {
-				$error_msg = "Password changed";				
+		if ($newpass != "" && $newpass != null) {
+			require ('_database.php');
+			// Try to change the password
+			$query = "UPDATE users SET password = :newpass WHERE user_name = :username AND password = :oldpass";
+
+			// Parse the statement...
+			$statement = oci_parse($connection, $query);
+			// ...then bind names dynamically so that users can't inject data
+			oci_bind_by_name($statement, ":newpass", $newpass);
+			oci_bind_by_name($statement, ":oldpass", $oldpass);
+			oci_bind_by_name($statement, ":username", getUserName());
+
+			if (oci_execute($statement)) {
+				// If a row was edited (should only be 1 since user_name is PK)
+				if (oci_num_rows($statement) > 0) {
+					$error_msg = "Password changed";
+				} else {
+					$error_msg = "Invalid password";
+				}
 			} else {
-				$error_msg = "Invalid password";
+				$error_msg = "Database Error: Could not update password";
+				echo oci_error();
 			}
+			oci_free_statement($statement);
+			oci_close($connection);
 		} else {
-			$error_msg = "Database Error: Could not update password";
-			echo oci_error();
+			$error_msg = "Password cannot be blank";
 		}
-		oci_free_statement($statement);
-		oci_close($connection);
 	} else {
 		$error_msg = "Password fields don't match!";
 	}
