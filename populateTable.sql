@@ -1,12 +1,13 @@
 insert into persons values(111111, 'Poppy', 'Pomfrey', 'Hogwarts Infirmary', 'pomfrey@hogwarts.uk', '111-1111');
 insert into persons values(222222, 'Hippocrates', 'Smethwyck', 'St Mungos Hospital for Magical Maladies and Injuries', 'smethwyck@mungos.uk', '222-2222');
 insert into persons values(333333, 'Gilderoy', 'Lockhart', 'Hogwarts School of Witchcraft and Wizardry', 'lockhart@hogwarts.uk', '333-3333');
-insert into persons values(444444, 'Abbott', 'Hannah', 'Hogwarts Infirmary', 'abbott@hogwarts.uk', '444-4444');
+insert into persons values(444444, 'Hannah', 'Abbott', 'Hogwarts Infirmary', 'abbott@hogwarts.uk', '444-4444');
 insert into persons values(555555, 'Hermione', 'Granger','London', 'granger@hogwarts.uk', '555-5555');  
 insert into persons values(666666, 'Ron', 'Weasley', 'The Burrow','weasley@hogwarts.uk','666-6666');
 insert into persons values(777777, 'Harry', 'Potter', '4 Privet Drive', 'potter@hogwarts.uk', '777-7777');
-insert into persons values(888888, 'Longbottom', 'Neville', 'Hogwarts', 'longbottom@hogwarts.uk', '888-8888');
-insert into persons values(999999, 'Lupin', 'Teddy', 'Hogwarts', 'lupin@hogwarts.uk', '999-9999');
+insert into persons values(888888, 'Neville', 'Longbottom', 'Hogwarts', 'longbottom@hogwarts.uk', '888-8888');
+insert into persons values(999999, 'Teddy', 'Lupin', 'Hogwarts', 'lupin@hogwarts.uk', '999-9999');
+insert into persons values(123456, 'Albus', 'Dumbledore', 'Hogwarts', 'lemondrop@hogwarts.uk', '5555555555');
 
 insert into users values('pomfrey', 'anapneo', 'd', 111111, to_date('1951-09-01', 'YYYY-MM-DD')); 
 insert into users values('potter', 'accio', 'p', 777777,to_date('1980-07-31', 'YYYY-MM-DD'));
@@ -17,6 +18,7 @@ insert into users values('smethwyck', 'rennervate', 'r', 222222, to_date('1967-0
 insert into users values('abbott', 'expectoPatronum', 'd', 444444, to_date('1980-10-12', 'YYYY-MM-DD'));
 insert into users values('longbottom', 'riddikulus', 'p', 888888, to_date('1980-07-30', 'YYYY-MM-DD'));
 insert into users values('lupin', 'reducto', 'p', 999999, to_date('1951-05-10', 'YYYY-MM-DD'));
+insert into users values('dumbledrop', 'fizzingWizbee', 'a', 123456, to_date('1881-08-18', 'YYYY-MM-DD'));
 
 insert into family_doctor values(111111, 555555);
 insert into family_doctor values(111111, 666666);
