@@ -58,19 +58,6 @@ if (isset($_POST['changeinfo'])) {
 <html>
 	<head>
 		<script src="validate_form.js"></script>
-		<script>
-			function autofilter(form) {
-				var mfields = document.getElementsByTagName("input");
-				var field;
-				for ( i = 0; i < mfields.length; i++) {
-					field = mfields[i];
-					if (field.getAttribute("filter") != null) {
-						var regex = field.getAttribute("filter");
-						field.value = field.value.replace(RegExp(regex, 'g'), '');
-					}
-				}
-			}
-		</script>
 		<style>
 			table {
 				border: 1px solid black;

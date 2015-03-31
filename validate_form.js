@@ -22,14 +22,14 @@ function validateInput(form) {
 	}
 }
 
-function autofilter(form, field) {
+function autofilter(form) {
 	var mfields = document.getElementsByTagName("input");
 	var field;
 	for ( i = 0; i < mfields.length; i++) {
 		field = mfields[i];
 		if (field.getAttribute("filter") != null) {
 			var regex = field.getAttribute("filter");
-			field.value = field.value.replace(RegExp(regex), '');
+			field.value = field.value.replace(RegExp(regex, 'g'), '');
 		}
 	}
 }
