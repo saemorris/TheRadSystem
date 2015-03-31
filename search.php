@@ -1,12 +1,20 @@
+<?php
+require_once('session.php');
+?>
 
 <!DOCTYPE html>
 <html>
     <head>
         <title>Search </title>
         <link rel="stylesheet" href="searchpage.css">
-        
+        <a href="logout.php">Logout</a>
+ 
+        <!-- if the user is an admin, give them the optin to upload a record -->
+        <?php if (getUserClass() == "r") { ?>
+        		<a href="uploadRecord.php">Upload Record</a>
+        <?php } ?>
+ 
         <form id="search" action="search.php" method="post">
-        	<!--<div id="container"> -->
 	        	
 	        	<div id="dateRangeSearch">
 	        		<p class="header">Search by Date Range</p>	
@@ -51,7 +59,6 @@
 				<div style="clear:both"</div>
 	        	  	
 			<hr>
-        	<!--</div> -->
         </form>
     </head>
     <body>
