@@ -9,6 +9,8 @@ DROP TABLE pacs_images;
 DROP TABLE radiology_record;
 DROP TABLE users;
 DROP TABLE persons;
+DROP SEQUENCE record_id_seq;
+DROP SEQUENCE image_id_seq;
 
 /*
  *  To store the personal information
@@ -55,7 +57,7 @@ CREATE TABLE family_doctor (
  *  to store the radiology records
  */
 CREATE TABLE radiology_record (
-   record_id   int,
+   record_id   int NOT NULL, 
    patient_id  int,
    doctor_id   int,
    radiologist_id int,
@@ -70,16 +72,21 @@ CREATE TABLE radiology_record (
    FOREIGN KEY(radiologist_id) REFERENCES  persons
 );
 
+CREATE SEQUENCE record_id_seq;
+
+
 /*
  *  to store the pacs images
  */
 CREATE TABLE pacs_images (
    record_id   int,
-   image_id    int,
+   image_id    int NOT NULL,
    thumbnail   blob,
    regular_size blob,
    full_size    blob,
    PRIMARY KEY(record_id,image_id),
    FOREIGN KEY(record_id) REFERENCES radiology_record
 );
+
+CREATE SEQUENCE image_id_seq;
 
