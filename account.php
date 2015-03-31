@@ -27,15 +27,36 @@
 		
 		?>
 		
-		<?php if (oci_fetch($statement)) { ?>
+		<?php if (oci_fetch($statement)) {
+			// Fetch data
+			$firstname = oci_result($statement, "FIRST_NAME");
+			$lastname = oci_result($statement, "LAST_NAME");
+			$address = oci_result($statement, "ADDRESS");
+			$email = oci_result($statement, "EMAIL");
+			$phone = oci_result($statement, "PHONE");
+			
+			?>
 			<table>
-			<?php for ($i = 1; $i <= oci_num_fields($statement); $i++) { ?>
 				<tr>
-					<td class="fieldname"><?php echo oci_field_name($statement, $i)?></td>
-					<td class="data"><?php echo oci_result($statement, oci_field_name($statement, $i)) ?></td>
+					<td class="fieldname">First Name: </td>
+					<td class="data"><p><?php echo $firstname ?></p></td>
 				</tr>
-				
-			<?php } ?>
+				<tr>
+					<td class="fieldname">Last Name: </td>
+					<td class="data"><p><?php echo $lastname ?></p></td>
+				</tr>
+				<tr>
+					<td class="fieldname">Address: </td>
+					<td class="data"><p><?php echo $address ?></p></td>
+				</tr>
+				<tr>
+					<td class="fieldname">Email: </td>
+					<td class="data"><p><?php echo $email ?></p></td>
+				</tr>
+				<tr>
+					<td class="fieldname">Phone: </td>
+					<td class="data"><p><?php echo $phone ?></p></td>
+				</tr>
 			</table>
 			
 		<?php } else {
