@@ -2,7 +2,7 @@
 $id = $_GET['id'];
 
 require ('_database.php');
-$query = "Select full_size from pacs_images where image_id = :id";
+$query = "Select thumbnail from pacs_images where image_id = :id";
 
 $statement = oci_parse($connection, $query);
 oci_bind_by_name($statement, ':id', $id);
