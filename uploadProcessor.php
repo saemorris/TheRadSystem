@@ -58,24 +58,32 @@ require ('_database.php');
 
 // Creates an "empty" OCI-Lob object to bind to the locator
 $image_lob = oci_new_descriptor($connection, OCI_D_LOB);
+$regular_lob = oci_new_descriptor($connection, OCI_D_LOB);
 $thumbnail_lob = oci_new_descriptor($connection, OCI_D_LOB);
 
 $query="INSERT INTO pacs_images (record_id, image_id, thumbnail, full_size) VALUES 
 (1, image_id_seq.nextval, EMPTY_BLOB(), EMPTY_BLOB()) RETURNING 
-thumbnail, full_size, image_id INTO :thumbnail, :image, :id";
+thumbnail, regular_size, full_size, image_id INTO :thumbnail, :regular, :image, :id";
 
 $src = imagecreatefromjpeg($_FILES[$filename]['name']);
+
+// Image sizes
+$regular_width = 600;
+$regular_height = round($regular_height*imagesy($src)/imagesx($src));
+
+$regular = imagecreate($regular_width, $regular_height);
 $thumbnail = imagecreate(150, 150);
 
 // resize image for different zoom strength
+imagecopyresampled($regular, $src, 0, 0, 0, 0, $regular_width, $regular_height, imagesx($src), imagesy($src));
 imagecopyresampled($thumbnail, $src, 0, 0, 0, 0, 150, 150, imagesx($src), imagesy($src));
 
 $statement = oci_parse($connection, $query);
 
-oci_bind_by_name($statement, ":thumbnail", $thumbnail_lob, -1, OCI_B_BLOB);
-
 // Bind the returned Oracle LOB locator to the PHP LOB object
 oci_bind_by_name($statement, ":image", $image_lob, -1, OCI_B_BLOB);
+oci_bind_by_name($statement, ":regular", $image_lob, -1, OCI_B_BLOB);
+oci_bind_by_name($statement, ":thumbnail", $thumbnail_lob, -1, OCI_B_BLOB);
 
 oci_bind_by_name($statement, ":id", $id);
 
@@ -88,12 +96,25 @@ if($image_lob->savefile($_FILES[$filename]['name'])) {
 	echo "Couldn't upload image";
 }
 
-$tempfilename = tempnam(sys_get_temp_dir(), "upload");
+// Upload thumbnail
+
+$tempfilename = tempnam(sys_get_temp_dir(), "upload_thumb");
 imagejpeg($thumbnail, $tempfilename);
 
 if($thumbnail_lob->savefile($tempfilename)) {
 	oci_commit($connection);
 	echo "Thumbnail successfully uploaded";
+} else {
+	echo "Couldn't upload image";
+}
+
+// Upload regular
+$tempfilename = tempnam(sys_get_temp_dir(), "upload_reg");
+imagejpeg($regular, $tempfilename);
+
+if($thumbnail_lob->savefile($tempfilename)) {
+	oci_commit($connection);
+	echo "Regular Size successfully uploaded";
 } else {
 	echo "Couldn't upload image";
 }
