@@ -3,7 +3,7 @@ $id = $_GET['id'];
 $size = $_GET['size'];
 
 // Size parameter must be 0 (thumbnail), 1 (regular), 2 (full size)
-if (!isset($size) || !(0 <= $size && $size <= 2)) {
+if (!isset($size) || !(0 <= $size && $size <= 2) || $size == '') {
 	$size = 1;
 }
 
