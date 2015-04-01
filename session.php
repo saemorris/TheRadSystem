@@ -33,4 +33,22 @@ function getUserPersonID() {
 	return $_SESSION['person_id'];
 }
 
+/**
+ * Checks if the class is of the required type. If it isn't,
+ * the requested page is not displayed.
+ * 
+ * $type is a string. If multiple user types are allowed to
+ * view a page, just use multiple characters in the string
+ * 
+ * ex. requireUserClass('a');
+ *     requireUserClass('adr');
+ */
+function requireUserClass($type) {
+	if (strpos($type, getUserClass()) === FALSE) {
+		header('HTTP/1.0 403 Forbidden');
+		include('forbidden.html');
+		exit;
+	}
+}
+
 ?>
