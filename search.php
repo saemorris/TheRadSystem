@@ -12,8 +12,11 @@ require_once('session.php');
         <!-- if the user is an admin, give them the optin to upload a record -->
         <?php if (getUserClass() == "r") { ?>
         		<a href="uploadRecord.php">Upload Record</a>
-        <?php } ?>
- 
+        <?php } 
+        if (getUserClass() == "a") { ?>
+        	<a href="report_request.php">Generate Report</a>
+        <?php }?>
+        
         <form id="search" action="search.php" method="post">
 	        	
 	        	<div id="dateRangeSearch">
