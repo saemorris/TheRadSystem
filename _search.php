@@ -9,6 +9,10 @@ if (isset($_POST['search'])) {
 	} else {
 		//require a connection to the database
 		require ('_database.php');
+
+		//get the class of the user
+		$class = getUserClass();
+		$personId = getUserPersonID();
 		
 		//check if date query
 		if (empty($_POST['keyWordQuery'])) {
@@ -102,22 +106,37 @@ if (isset($_POST['search'])) {
 			echo "<th>Description</th>";			
 			echo "</tr>";
 			
-			$query="SELECT record_id, patient_id, person_id, first_name, last_name, doctor_id, 
-				radiologist_id, test_type, prescribing_date, test_date, diagnosis, description
-				FROM radiology_record r, persons p WHERE r.patient_id = p.person_id AND (";
+			$query="SELECT DISTINCT record_id, patient_id, person_id, first_name, last_name, doctor_id, radiologist_id, 
+						test_type, prescribing_date, test_date, diagnosis, description FROM (SELECT r.record_id, r.patient_id, p.person_id, p.first_name, p.last_name, r.doctor_id, r.radiologist_id, 
+						r.test_type, r.prescribing_date, r.test_date, r.diagnosis, r.description 
+						FROM radiology_record r, persons p, family_doctor fd WHERE r.patient_id = p.person_id AND ";
+				
+							// patient can only view his/her records
+			if ($class == "p") {
+				$query .= "p.person_id = $personId AND (";
+			} else if ($class == "d") {
+				// doctor can only view records of their patients
+				$query .= "fd.doctor_id = $personId AND fd.doctor_id = r.doctor_id AND (";
+			} else if ($class == "r") {
+				// radiologist can only view records of tests conducted by oneself
+				$query .= "r.radiologist_id = $personId AND (";
+			} 	
+				
 			$i=1;
 			foreach ($words as $word) {
-				$query .= "CONTAINS(description, '$word', $i) > 0 OR ";
+				$query .= "CONTAINS(r.description, '$word', $i) > 0 OR ";
 				$i = $i+1;
-				$query .= "CONTAINS(diagnosis, '$word', $i) > 0 OR ";
+				$query .= "CONTAINS(r.diagnosis, '$word', $i) > 0 OR ";
 				$i = $i+1;
-				$query .= "CONTAINS(first_name, '$word', $i) > 0 OR ";
+				$query .= "CONTAINS(p.first_name, '$word', $i) > 0 OR ";
 				$i = $i + 1;
-				$query .= "CONTAINS(last_name, '$word', $i) > 0 OR ";
+				$query .= "CONTAINS(p.last_name, '$word', $i) > 0 OR ";
 				$i = $i + 1;
 			}
 			$query = substr_replace($query, '', -3, 2);
-			$query .= ") ORDER BY SCORE(1)";
+			
+	
+			$query .= ") ORDER BY SCORE(1))";
 			$statement = oci_parse($connection, $query);
 
 			$results = oci_execute($statement);
