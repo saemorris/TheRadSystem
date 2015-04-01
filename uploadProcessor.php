@@ -46,7 +46,7 @@ isset($_POST['submit'])
 // taken... if it is already taken keep trying until we find a vacant one 
 // sample filename: 1140732936-filename.jpg 
 $now = time(); 
-while(file_exists($uploadFilename = $uploadsDirectory.$now.'-'.$_FILES[$filename]['name'])) 
+while(file_exists($uploadFilename = $uploadsDirectory.$now.'-'.$_FILES[$filename]['tmp_name'])) 
 { 
     $now++; 
 } 
@@ -61,18 +61,20 @@ $image_lob = oci_new_descriptor($connection, OCI_D_LOB);
 $regular_lob = oci_new_descriptor($connection, OCI_D_LOB);
 $thumbnail_lob = oci_new_descriptor($connection, OCI_D_LOB);
 
-$query="INSERT INTO pacs_images (record_id, image_id, thumbnail, full_size) VALUES 
-(1, image_id_seq.nextval, EMPTY_BLOB(), EMPTY_BLOB()) RETURNING 
+$query="INSERT INTO pacs_images (record_id, image_id, thumbnail, regular_size, full_size) VALUES 
+(1, image_id_seq.nextval, EMPTY_BLOB(), EMPTY_BLOB(), EMPTY_BLOB()) RETURNING 
 thumbnail, regular_size, full_size, image_id INTO :thumbnail, :regular, :image, :id";
 
-$src = imagecreatefromjpeg($_FILES[$filename]['name']);
+$src = imagecreatefromjpeg($_FILES[$filename]['tmp_name']);
 
-// Image sizes
-$regular_width = 600;
-$regular_height = round($regular_height*imagesy($src)/imagesx($src));
+// Regular image size is proportional to original
+$regular_width = 400;
+$regular_height = round($regular_width*imagesy($src)/imagesx($src));
 
-$regular = imagecreate($regular_width, $regular_height);
-$thumbnail = imagecreate(150, 150);
+echo "<p>Regular size = $regular_width x $regular_height</p>";
+
+$regular = imagecreatetruecolor($regular_width, $regular_height);
+$thumbnail = imagecreatetruecolor(150, 150);
 
 // resize image for different zoom strength
 imagecopyresampled($regular, $src, 0, 0, 0, 0, $regular_width, $regular_height, imagesx($src), imagesy($src));
@@ -82,44 +84,60 @@ $statement = oci_parse($connection, $query);
 
 // Bind the returned Oracle LOB locator to the PHP LOB object
 oci_bind_by_name($statement, ":image", $image_lob, -1, OCI_B_BLOB);
-oci_bind_by_name($statement, ":regular", $image_lob, -1, OCI_B_BLOB);
+oci_bind_by_name($statement, ":regular", $regular_lob, -1, OCI_B_BLOB);
 oci_bind_by_name($statement, ":thumbnail", $thumbnail_lob, -1, OCI_B_BLOB);
 
 oci_bind_by_name($statement, ":id", $id);
 
 // Execute the statement using , OCI_DEFAULT - as a transaction
+$valid = TRUE;
 oci_execute($statement, OCI_DEFAULT) or die ("Unable to execute query\n");
 
-if($image_lob->savefile($_FILES[$filename]['name'])) {
-	echo "image successfully uploaded";
+echo "<p>image id = $id</p>";
+
+// Save full size image
+if($image_lob->savefile($_FILES[$filename]['tmp_name'])) {
+	echo "<p>image successfully uploaded</p>";
 } else {
-	echo "Couldn't upload image";
+	oci_rollback($connection);
+	$valid = FALSE;
+	echo "<p>Couldn't upload image</p>";
 }
 
 // Upload thumbnail
-
-$tempfilename = tempnam(sys_get_temp_dir(), "upload_thumb");
-imagejpeg($thumbnail, $tempfilename);
-
-if($thumbnail_lob->savefile($tempfilename)) {
-	oci_commit($connection);
-	echo "Thumbnail successfully uploaded";
-} else {
-	echo "Couldn't upload image";
+if ($valid) {
+	$tempfilename = tempnam(sys_get_temp_dir(), "upload_thumb");
+	imagejpeg($thumbnail, $tempfilename, 90);
+	echo "saving to '$tempfilename' ... ";
+	
+	if($thumbnail_lob->savefile($tempfilename)) {
+		echo "<p>Thumbnail successfully uploaded</p>";
+	} else {
+		oci_rollback($connection);
+		$valid = FALSE;
+		echo "<p>Couldn't upload image</p>";
+	}
 }
 
 // Upload regular
-$tempfilename = tempnam(sys_get_temp_dir(), "upload_reg");
-imagejpeg($regular, $tempfilename);
-
-if($thumbnail_lob->savefile($tempfilename)) {
-	oci_commit($connection);
-	echo "Regular Size successfully uploaded";
-} else {
-	echo "Couldn't upload image";
+if ($valid) {
+	$tempfilename = tempnam(sys_get_temp_dir(), "upload_thumb");
+	imagejpeg($regular, $tempfilename, 90);
+	echo "saving to '$tempfilename' ... ";
+	
+	if($regular_lob->savefile($tempfilename)) {
+		echo "<p>Regular successfully uploaded</p>";
+	} else {
+		oci_rollback($connection);
+		$valid = FALSE;
+		echo "<p>Couldn't upload image</p>";
+	}
 }
 
-echo "<img src='displayImage.php?id=$id' />";
+if ($valid) {
+	oci_commit($connection);
+	echo "<img src='displayImage.php?id=$id&size=1' />";
+}
 
 // Clean up database objects
 oci_free_statement($statement);
