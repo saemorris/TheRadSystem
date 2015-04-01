@@ -120,7 +120,9 @@ if (isset($_POST['search'])) {
 			} else if ($class == "r") {
 				// radiologist can only view records of tests conducted by oneself
 				$query .= "r.radiologist_id = $personId AND (";
-			} 	
+			} else {
+				$query .= "(";
+			}
 				
 			$i=1;
 			foreach ($words as $word) {
@@ -135,8 +137,8 @@ if (isset($_POST['search'])) {
 			}
 			$query = substr_replace($query, '', -3, 2);
 			
-	
 			$query .= ") ORDER BY SCORE(1))";
+
 			$statement = oci_parse($connection, $query);
 
 			$results = oci_execute($statement);
