@@ -87,7 +87,7 @@ oci_bind_by_name($statement, ":image", $image_lob, -1, OCI_B_BLOB);
 oci_bind_by_name($statement, ":regular", $regular_lob, -1, OCI_B_BLOB);
 oci_bind_by_name($statement, ":thumbnail", $thumbnail_lob, -1, OCI_B_BLOB);
 
-oci_bind_by_name($statement, ":id", $id);
+oci_bind_by_name($statement, ":id", $id, -1, OCI_B_INT);
 
 // Execute the statement using , OCI_DEFAULT - as a transaction
 $valid = TRUE;
