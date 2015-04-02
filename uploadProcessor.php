@@ -44,7 +44,6 @@ isset($_POST['submit'])
      
 // make a unique filename for the uploaded file and check it is not already 
 // taken... if it is already taken keep trying until we find a vacant one 
-// sample filename: 1140732936-filename.jpg 
 $now = time(); 
 while(file_exists($uploadFilename = $uploadsDirectory.$now.'-'.$_FILES[$filename]['tmp_name'])) 
 { 
@@ -61,8 +60,12 @@ $image_lob = oci_new_descriptor($connection, OCI_D_LOB);
 $regular_lob = oci_new_descriptor($connection, OCI_D_LOB);
 $thumbnail_lob = oci_new_descriptor($connection, OCI_D_LOB);
 
+$record_id = (int) $_POST['record_id'];
+echo $record_id;
+
+
 $query="INSERT INTO pacs_images (record_id, image_id, thumbnail, regular_size, full_size) VALUES 
-(1, image_id_seq.nextval, EMPTY_BLOB(), EMPTY_BLOB(), EMPTY_BLOB()) RETURNING 
+($record_id, image_id_seq.nextval, EMPTY_BLOB(), EMPTY_BLOB(), EMPTY_BLOB()) RETURNING 
 thumbnail, regular_size, full_size, image_id INTO :thumbnail, :regular, :image, :id";
 
 $src = imagecreatefromjpeg($_FILES[$filename]['tmp_name']);
