@@ -33,12 +33,14 @@
 						//get a database connection
 						require_once ('_database.php');
 
-						//creaate the query to get back the report results
-						$query = "SELECT p.first_name, p.last_name, p.address, p.phone, r.test_date FROM persons p, radiology_record r WHERE p.person_id = r.patient_id AND r.diagnosis = '$diagnosis' AND '$year' = (EXTRACT (YEAR FROM r.test_date))";
-
+						//create the query to get back the report results					
+						$query = "SELECT p.first_name, p.last_name, p.address, p.phone, r.test_date FROM persons p, radiology_record r 
+							WHERE p.person_id = r.patient_id AND CONTAINS(diagnosis, '$diagnosis', 1) > 0 AND '$year' = (EXTRACT (YEAR FROM r.test_date))";
+						
 						//get a database response
 						$statement = oci_parse($connection, $query);
 						$results = oci_execute($statement);
+
 
 						//validate results then print table headers
 						if ($results) {
