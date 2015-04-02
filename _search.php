@@ -111,7 +111,7 @@ if (isset($_POST['search'])) {
 						r.test_type, r.prescribing_date, r.test_date, r.diagnosis, r.description 
 						FROM radiology_record r, persons p, family_doctor fd WHERE r.patient_id = p.person_id AND ";
 				
-							// patient can only view his/her records
+			// patient can only view his/her records
 			if ($class == "p") {
 				$query .= "p.person_id = $personId AND (";
 			} else if ($class == "d") {
@@ -138,7 +138,7 @@ if (isset($_POST['search'])) {
 			$query = substr_replace($query, '', -3, 2);
 			
 			$query .= ") ORDER BY SCORE(1))";
-
+			
 			$statement = oci_parse($connection, $query);
 
 			$results = oci_execute($statement);
