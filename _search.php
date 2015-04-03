@@ -149,7 +149,7 @@ if (isset($_POST['search'])) {
 			$query = substr_replace($query, '', -3, 2);
 
 			$query .= ") ORDER BY SCORE(1))";
-
+			
 			$statement = oci_parse($connection, $query);
 
 			$results = oci_execute($statement);

@@ -142,6 +142,8 @@ if ($valid) {
 	echo "<img src='displayImage.php?id=$id&size=1' />";
 }
 
+echo "<a href='search.php'>Home</a>";
+
 // Clean up database objects
 oci_free_statement($statement);
 oci_close($connection);
