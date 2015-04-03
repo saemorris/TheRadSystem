@@ -21,15 +21,18 @@ if (isset($_POST['upload'])) {
 		$description = $_POST['description'];
 		
 		$query="INSERT INTO radiology_record VALUES(record_id_seq.nextval, $patient_id, $doctor_id, $radiologist_id,
-			'$test_type', to_date('$prescribing_date', 'YYYY-MM-DD'), to_date('$test_date', 'YYYY-MM-DD'), '$diagnosis', '$description')";
+			'$test_type', to_date('$prescribing_date', 'YYYY-MM-DD'), to_date('$test_date', 'YYYY-MM-DD'), '$diagnosis', '$description') 
+			RETURNING record_id INTO :record_id";
 		
 		$statement = oci_parse($connection, $query);
+		oci_bind_by_name($statement, ":record_id", $record_id, -1, OCI_B_INT);
 		$results = oci_execute($statement);
-
+		
+		echo $record_id;
+		
+		
 		// sync the diagnosis index with the new data just uploaded
 		$query = "begin ctx_ddl.sync_index('diagnosisIndex', '2M'); end;";
-		
-		echo $query;
 		
 		$statement = oci_parse($connection, $query);
 		$result = oci_execute($statement);
@@ -41,8 +44,11 @@ if (isset($_POST['upload'])) {
 
 		oci_commit($connection);
 		
+		header("Location: uploadImage.php?record_id=$record_id");
+		
 		// upload an image for the record that was uploaded	
-		require("uploadImage.php");
+		//require("uploadImage.php");
+		
 	}
 }
 

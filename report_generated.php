@@ -41,7 +41,6 @@
 						$statement = oci_parse($connection, $query);
 						$results = oci_execute($statement);
 
-
 						//validate results then print table headers
 						if ($results) {
 							echo '<table align="left"

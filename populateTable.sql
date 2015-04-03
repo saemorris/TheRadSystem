@@ -11,8 +11,8 @@ insert into persons values(123456, 'Albus', 'Dumbledore', 'Hogwarts', 'lemondrop
 
 insert into users values('pomfrey', 'anapneo', 'd', 111111, to_date('1951-09-01', 'YYYY-MM-DD')); 
 insert into users values('potter', 'accio', 'p', 777777,to_date('1980-07-31', 'YYYY-MM-DD'));
-insert into users values('granger','alohamora', 'p', 666666, to_date('1979-09-19', 'YYYY-MM-DD'));
-insert into users values('weasley','wingardiumLeviosa','p', 555555,to_date('1980-03-01', 'YYYY-MM-DD'));
+insert into users values('granger','alohamora', 'p', 555555, to_date('1979-09-19', 'YYYY-MM-DD'));
+insert into users values('weasley','wingardiumLeviosa','p', 666666,to_date('1980-03-01', 'YYYY-MM-DD'));
 insert into users values('lockhart', 'brackiumEmendo', 'r', 333333, to_date('1992-09-01', 'YYYY-MM-DD'));
 insert into users values('smethwyck', 'rennervate', 'r', 222222, to_date('1967-06-09', 'YYYY-MM-DD'));
 insert into users values('abbott', 'expectoPatronum', 'd', 444444, to_date('1980-10-12', 'YYYY-MM-DD'));

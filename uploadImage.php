@@ -30,13 +30,14 @@ $uploadHandler = 'http://' . $_SERVER['HTTP_HOST'] . $directory_self . 'uploadPr
          
         <p> 
             <label for="file">File to upload:</label> 
-            <input id="file" type="file" name="image_file"> 
+            <input id="file" type="file" name="image_file"/> 
         </p> 
                  
         <p> 
             <label for="submit">Press to...</label> 
-            <input id="submit" type="submit" name="submit" value="Upload"> 
+            <input id="submit" type="submit" name="submit" value="Upload"/> 
         </p> 
+        	<input id="hidden" type="hidden" name="record_id" value="<?php echo $_GET['record_id']; ?>" />
      
     </form> 
     
