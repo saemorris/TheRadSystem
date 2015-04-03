@@ -79,7 +79,9 @@ requireUserClass('a');
 					}
 					echo "<tr>";
 					$num++;
-					echo "<td><a href='edituser.php?id=" . oci_result($statement, "PERSON_ID") . "'>".oci_result($statement, 1)."</a></td>";
+					// Link jumps to edit_user div with user id
+					echo "<td><a target='_blank' href='editinfo.php?id=".oci_result($statement, "PERSON_ID")."'>";
+					echo oci_result($statement, 1)."</a></td>";
 					for ($field = 2; $field <= oci_num_fields($statement); $field++) {
 						echo "<td>", oci_result($statement, $field), "</td>";
 					}
@@ -102,9 +104,7 @@ requireUserClass('a');
 				Use the search feature above to find users.
 			</p>
 			<?php } ?>
-			<table>
-
-			</table>
+			
 		</div>
 	</body>
 </html>
