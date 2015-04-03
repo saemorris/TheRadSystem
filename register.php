@@ -1,6 +1,6 @@
 <?php
 if (isset($_POST['register'])) {
-	header("Location: index.php");
+	header("Location: users.php");
 	exit();
 }
 ?>
