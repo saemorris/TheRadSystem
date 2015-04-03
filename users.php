@@ -8,7 +8,7 @@ requireUserClass('a');
 		<a href='index.php'>Home</a>
 		<h1> Users </h1>
 		<p>
-			<a href="newuser.php">Add Account</a>
+			<a href="register.php">Add Account</a>
 		</p>
 		<div>
 			<form id="searchform" required="1" name="search_users" method="get" action="<?php $PHP_SELF ?>" >

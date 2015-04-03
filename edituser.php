@@ -152,8 +152,8 @@ if (isset($_POST['changeinfo'])) {
 	// Commit and exit
 	oci_commit($connection);
 	oci_close($connection);
-	
-	header('Location: users.php');
+
+	header('Location: users.php?q='.$username);
 	exit ;
 }
 
