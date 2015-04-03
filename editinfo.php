@@ -38,6 +38,20 @@ if (isset($_POST['changeinfo'])) {
 
 		if (oci_num_rows($statement) > 0) {
 			header("Location: account.php");
+			
+			// sync the diagnosis index with the new data just uploaded
+			$query = "begin ctx_ddl.sync_index('diagnosisIndex', '2M'); end;";
+			
+			$statement = oci_parse($connection, $query);
+			$result = oci_execute($statement);
+	
+			// sync the description index with the new data just uploaded
+			$query = "begin ctx_ddl.sync_index('descriptionIndex', '2M'); end;";
+			$statement = oci_parse($connection, $query);
+			$result = oci_execute($statement);
+	
+			oci_commit($connection);
+			
 			oci_free_statement($statement);
 			oci_close($connection);
 			exit;
@@ -46,7 +60,6 @@ if (isset($_POST['changeinfo'])) {
 			oci_free_statement($statement);
 			oci_close($connection);
 		}
-
 	}
 }
 ?>
