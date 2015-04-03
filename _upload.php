@@ -40,22 +40,31 @@ if (isset($_POST['upload'])) {
 		echo $record_id;
 
 		// sync the diagnosis index with the new data just uploaded
-		$query = "begin ctx_ddl.sync_index('diagnosisIndex', '2M'); end;";
+		$query = "begin ctx_ddl.sync_index('diagnosisIndex'); end;";
 
 		$statement = oci_parse($connection, $query);
 		$result = oci_execute($statement);
 
 		// sync the description index with the new data just uploaded
-		$query = "begin ctx_ddl.sync_index('descriptionIndex', '2M'); end;";
+		$query = "begin ctx_ddl.sync_index('descriptionIndex'); end;";
 		$statement = oci_parse($connection, $query);
 		$result = oci_execute($statement);
-
-		oci_commit($connection);
 
 		// sync the description index with the new data just uploaded
-		$query = "begin ctx_ddl.sync_index('testTypeIndex', '2M'); end;";
+		$query = "begin ctx_ddl.sync_index('testTypeIndex'); end;";
 		$statement = oci_parse($connection, $query);
 		$result = oci_execute($statement);
+		
+		// sync the description index with the new data just uploaded
+		$query = "begin ctx_ddl.sync_index('firstNameIndex'); end;";
+		$statement = oci_parse($connection, $query);
+		$result = oci_execute($statement);
+		
+		// sync the description index with the new data just uploaded
+		$query = "begin ctx_ddl.sync_index('lastNameIndex'); end;";
+		$statement = oci_parse($connection, $query);
+		$result = oci_execute($statement);
+		
 
 		oci_commit($connection);
 

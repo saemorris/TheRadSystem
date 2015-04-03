@@ -145,8 +145,6 @@ if ($valid) {
 	echo "<img src='displayImage.php?id=$id&size=1' />";
 }
 
-
-
 // Clean up database objects
 oci_free_statement($statement);
 oci_close($connection);
