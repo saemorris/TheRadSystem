@@ -4,10 +4,16 @@
 	</head>
 	<body>
 		<form action="http://consort.cs.ualberta.ca/~vanbelle/TheRadSystem/report_generated.php" method="post">
+			<p><a href="search.php">Home</a></p>
 
 			<?php
 			//http://www.newthinktank.com/2014/09/php-mysql-tutorial/ 2015/03/25
+			/**
+			 * This program generates a report based on the diagnosis and year that report_reuest passed on 
+			 * It produces an error if there is a missing input, or the user is not an admin.
+			 */
 			require ('session.php');
+			//if the user is not an admin print an error
 			if (getUserClass() != "a") {
 				echo 'No Access To This Page';
 				?> <p><a href="search.php">Home</a></p>
@@ -17,6 +23,7 @@
 				if (isset($_POST['request'])) {
 					$data_missing = array();
 					echo '<b>Diagnosis Report</b> <br />';
+					//check for missing data
 					if (empty($_POST['diagnosis'])) {
 						$data_missing[] = 'diagnosis';
 					} else {
@@ -28,7 +35,7 @@
 					} else {
 						$year = trim($_POST['year']);
 					}
-
+					//if there is no missing data
 					if (empty($data_missing)) {
 						//get a database connection
 						require_once ('_database.php');
@@ -71,6 +78,7 @@
 						oci_close($connection);
 
 					} else {
+						//if there was missing data print an error message
 						echo 'Missing Data: ';
 						foreach ($data_missing as $missing) {
 							echo $missing.'<br />';

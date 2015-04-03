@@ -1,4 +1,11 @@
 <?php 	
+/**
+ * This file accepts a diagnosis and a year and passes them on to 
+ * report_generated.php so that a report can be generated 
+ * It also provides a link back to the home page and produces
+ * an error if the user is not an admin 
+ **/
+
 require('session.php'); 
 if (getUserClass() != "a") {
 	echo 'No Access To This Page';
@@ -13,6 +20,7 @@ if (getUserClass() != "a") {
 	</head>
 	<body>
 		<form id="reportRequest" action="report_generated.php" method="post">
+			<p><a href="search.php">Home</a></p>
 			<div>
 				<p class="header">
 					Report Request
