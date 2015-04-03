@@ -26,6 +26,8 @@ CREATE TABLE persons (
    UNIQUE (email)
 );
 
+CREATE SEQUENCE person_id_seq;
+
 /*
  *  To store the log-in information
  *  Note that a person may have been assigned different user_name(s), depending
