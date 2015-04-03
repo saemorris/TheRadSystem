@@ -73,7 +73,7 @@
 					} else {
 						echo 'Missing Data: ';
 						foreach ($data_missing as $missing) {
-							echo '$missing<br />';
+							echo $missing.'<br />';
 						}
 					}
 				}
