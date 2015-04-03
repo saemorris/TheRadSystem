@@ -20,11 +20,22 @@ if (isset($_POST['search'])) {
 			// query the database for records in the specified date range
 			$startDate = $_POST['dateQueryFrom'];
 			$endDate = $_POST['dateQueryTo'];
-			$query = "SELECT image_id, r.record_id, patient_id, first_name, last_name, doctor_id, radiologist_id,
-				test_type, prescribing_date, test_date, diagnosis, description	FROM radiology_record r, persons p, pacs_images i
-				WHERE patient_id = person_id AND r.record_id = i.record_id AND ((prescribing_date BETWEEN to_date('$startDate', 'YYYY-MM-DD') 
-				AND to_date('$endDate', 'YYYY-MM-DD')) OR (test_date BETWEEN to_date('$startDate', 'YYYY-MM-DD') 
-				AND to_date('$endDate', 'YYYY-MM-DD')))";
+			$query = "SELECT i.image_id, r.record_id, r.patient_id, p.first_name, p.last_name, r.doctor_id, r.radiologist_id,
+				r.test_type, r.prescribing_date, r.test_date, r.diagnosis, r.description	FROM family_doctor fd, radiology_record r, 
+				persons p, pacs_images i WHERE r.patient_id = p.person_id AND r.record_id = i.record_id AND 
+				((prescribing_date BETWEEN to_date('$startDate', 'YYYY-MM-DD') AND to_date('$endDate', 'YYYY-MM-DD')) 
+				OR (test_date BETWEEN to_date('$startDate', 'YYYY-MM-DD') AND to_date('$endDate', 'YYYY-MM-DD'))) ";
+				
+			// patient can only view his/her records
+			if ($class == "p") {
+				$query .= "AND p.person_id = $personId ";
+			} else if ($class == "d") {
+				// doctor can only view records of their patients
+				$query .= "AND fd.doctor_id = $personId AND fd.doctor_id = r.doctor_id ";
+			} else if ($class == "r") {
+				// radiologist can only view records of tests conducted by oneself
+				$query .= "AND r.radiologist_id = $personId ";
+			}	
 
 			//display what was searched for
 			echo "<b>Search results for: </b>";
