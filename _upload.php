@@ -61,9 +61,6 @@ if (isset($_POST['upload'])) {
 
 		header("Location: uploadImage.php?record_id=$record_id");
 
-		// upload an image for the record that was uploaded
-		//require("uploadImage.php");
-
 	}
 }
 ?>

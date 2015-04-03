@@ -1,5 +1,8 @@
 <?php 
 
+//display a home button to the user to take them back to the home page
+echo "<a href='search.php'>Home</a>";
+
 // Source: http://www.htmlgoodies.com/beyond/php/article.php/3877766/Web-Developer-How-To-Upload-Images-Using-PHP.htm
 
 // make a note of the current working directory, relative to root. 
@@ -141,6 +144,8 @@ if ($valid) {
 	oci_commit($connection);
 	echo "<img src='displayImage.php?id=$id&size=1' />";
 }
+
+
 
 // Clean up database objects
 oci_free_statement($statement);
