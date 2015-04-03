@@ -3,7 +3,7 @@ session_start();
 require ('_sessioninfo.php');
 
 function redirect() {
-	header("Location: index.php");
+	header("Location: search.php");
 	exit();
 }
 

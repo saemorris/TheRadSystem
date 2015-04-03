@@ -1,5 +1,5 @@
 <?php
-// Note: This page redirects back to /index.php if the
+// Note: This page redirects back to /search.php if the
 //       user has already logged in.
 
 require('_login.php');

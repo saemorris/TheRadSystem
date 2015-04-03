@@ -20,9 +20,12 @@
 		<?php 
 		require('_database.php');
 		
-		$query = "SELECT first_name, last_name, address, email, phone FROM persons WHERE person_id = '". getUserPersonID() ."'";
+		$query = "SELECT first_name, last_name, address, email, phone FROM persons WHERE person_id = :person_id";
    
 		$statement = oci_parse($connection, $query);
+		
+		oci_bind_by_name($statement, ":person_id", getUserPersonID());
+		
 		oci_execute($statement);
 		
 		?>
