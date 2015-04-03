@@ -5,6 +5,7 @@
 	</head>
 	<body>
 		<form id="olapRequest" action="OLAP_report.php" method="post">
+			<p><a href="search.php">Home</a></p>
 			<div>
 				<p class="header">
 					<b>Data Analysis Request</b>

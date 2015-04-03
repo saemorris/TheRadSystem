@@ -4,6 +4,7 @@
 	</head>
 	<body>
 		<form action="http://consort.cs.ualberta.ca/~vanbelle/TheRadSystem/report_generated.php" method="post">
+			<p><a href="search.php">Home</a></p>
 
 			<?php
 			//http://www.newthinktank.com/2014/09/php-mysql-tutorial/ 2015/03/25
