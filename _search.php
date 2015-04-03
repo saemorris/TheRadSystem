@@ -20,8 +20,8 @@ if (isset($_POST['search'])) {
 			// query the database for records in the specified date range	
 			$startDate = $_POST['dateQueryFrom'];
 			$endDate = $_POST['dateQueryTo'];
-			$query="SELECT record_id, patient_id, person_id, first_name, last_name, doctor_id, radiologist_id,
-				test_type, prescribing_date, test_date, diagnosis, description
+			$query="SELECT record_id, patient_id, first_name, last_name, doctor_id, radiologist_id,
+				test_type, prescribing_date, test_date, diagnosis, description, 
 				FROM radiology_record, persons WHERE patient_id = person_id AND ((prescribing_date BETWEEN
 				to_date('$startDate', 'YYYY-MM-DD') AND to_date('$endDate', 'YYYY-MM-DD'))
 				OR (test_date BETWEEN to_date('$startDate', 'YYYY-MM-DD') AND to_date('$endDate', 'YYYY-MM-DD')))";
@@ -111,7 +111,7 @@ if (isset($_POST['search'])) {
 						r.test_type, r.prescribing_date, r.test_date, r.diagnosis, r.description 
 						FROM radiology_record r, persons p, family_doctor fd WHERE r.patient_id = p.person_id AND ";
 				
-							// patient can only view his/her records
+			// patient can only view his/her records
 			if ($class == "p") {
 				$query .= "p.person_id = $personId AND (";
 			} else if ($class == "d") {
@@ -138,7 +138,7 @@ if (isset($_POST['search'])) {
 			$query = substr_replace($query, '', -3, 2);
 			
 			$query .= ") ORDER BY SCORE(1))";
-
+			
 			$statement = oci_parse($connection, $query);
 
 			$results = oci_execute($statement);
