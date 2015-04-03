@@ -16,6 +16,7 @@ require_once('session.php');
         if (getUserClass() == "a") { ?>
         	<a href="report_request.php">Generate Report</a>
         	<a href="OLAP_report.php">Data Analysis</a>
+        	<a href="users.php">Manage Users</a>
         <?php }?>
         
         <form id="search" action="search.php" method="post">

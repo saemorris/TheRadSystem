@@ -5,6 +5,7 @@ requireUserClass('a');
 
 <html>
 	<body>
+		<a href='index.php'>Home</a>
 		<h1> Users </h1>
 		<p>
 			<a href="newuser.php">Add Account</a>
