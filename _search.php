@@ -99,7 +99,7 @@ if (isset($_POST['search'])) {
 
 			// display column headers
 			echo "<tr>";
-			echo "<th>Record Id</ht>";
+			echo "<th>Thumbnail</ht>";
 			echo "<th>Patient Id</ht>";
 			echo "<th>Person Id</ht>";
 			echo "<th>First Name</ht>";
