@@ -44,6 +44,13 @@ if (isset($_POST['upload'])) {
 
 		oci_commit($connection);
 		
+		// sync the description index with the new data just uploaded
+		$query = "begin ctx_ddl.sync_index('testTypeIndex', '2M'); end;";
+		$statement = oci_parse($connection, $query);
+		$result = oci_execute($statement);
+
+		oci_commit($connection);
+		
 		header("Location: uploadImage.php?record_id=$record_id");
 		
 		// upload an image for the record that was uploaded	

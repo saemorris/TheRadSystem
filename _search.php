@@ -113,10 +113,12 @@ if (isset($_POST['search'])) {
 			echo "<th>Description</th>";
 			echo "</tr>";
 
-			$query = "SELECT DISTINCT record_id, patient_id, first_name, last_name, doctor_id, radiologist_id, 
-						test_type, prescribing_date, test_date, diagnosis, description FROM (SELECT r.record_id, r.patient_id, p.person_id, p.first_name, p.last_name, r.doctor_id, r.radiologist_id, 
-						r.test_type, r.prescribing_date, r.test_date, r.diagnosis, r.description 
-						FROM radiology_record r, persons p, family_doctor fd WHERE r.patient_id = p.person_id AND ";
+			$query = "SELECT DISTINCT image_id, record_id, patient_id, first_name, last_name, doctor_id, radiologist_id, 
+						test_type, prescribing_date, test_date, diagnosis, description FROM 
+							(SELECT i.image_id, r.record_id, r.patient_id, p.person_id, p.first_name, p.last_name, r.doctor_id, 
+								r.radiologist_id, r.test_type, r.prescribing_date, r.test_date, r.diagnosis, r.description 
+								FROM radiology_record r, persons p, family_doctor fd, pacs_images i 
+								WHERE r.patient_id = p.person_id AND r.record_id = i.record_id AND ";
 
 			// patient can only view his/her records
 			if ($class == "p") {
@@ -141,6 +143,8 @@ if (isset($_POST['search'])) {
 				$i = $i + 1;
 				$query .= "CONTAINS(p.last_name, '$word', $i) > 0 OR ";
 				$i = $i + 1;
+				$query .= "CONTAINS(r.test_type, '$word', $i) > 0 OR ";
+				$i = $i + 1; 
 			}
 			$query = substr_replace($query, '', -3, 2);
 
@@ -152,9 +156,15 @@ if (isset($_POST['search'])) {
 
 			// display the rows found with matching keywords
 			while ($row = oci_fetch_array($statement, OCI_ASSOC + OCI_RETURNS_NULLS)) {
+				$isFirst = True;
 				echo "<tr>";
 				foreach ($row as $item) {
-					echo "<td>" . ($item !== null ? htmlentities($item, ENT_QUOTES) : "&nbsp;") . "</td>";
+					if ($isFirst) {
+							echo "<td> <img src='displayImage.php?size=0&id=$item' /> </td>";	
+							$isFirst= False;	
+					} else {
+						echo "<td>" . ($item !== null ? htmlentities($item, ENT_QUOTES) : "&nbsp;") . "</td>";
+					}
 				}
 				echo "</tr>";
 			}
