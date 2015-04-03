@@ -90,3 +90,18 @@ CREATE TABLE pacs_images (
 
 CREATE SEQUENCE image_id_seq;
 
+CREATE INDEX descriptionIndex ON radiology_record(description) INDEXTYPE IS CTXSYS.CONTEXT;
+
+CREATE INDEX diagnosisIndex ON radiology_record(diagnosis) INDEXTYPE IS CTXSYS.CONTEXT;
+
+CREATE INDEX testTypeIndex On radiology_record(test_type) INDEXTYPE IS CTXSYS.CONTEXT;
+
+CREATE INDEX firstNameIndex ON persons(first_name) INDEXTYPE IS CTXSYS.CONTEXT;
+
+CREATE INDEX lastNameIndex ON persons(last_name) INDEXTYPE IS CTXSYS.CONTEXT;
+
+/*
+ * Insert into the database an admin account to allow initial set up of acounts
+ */
+ INSERT INTO persons values (000000, 'admin', 'admin', 'admin', 'admin', 'admin');
+ INSERT INTO users values ('admin', 'admin', 'a', '0', to_date('2015-04-02', 'YYYY-MM-DD')); 

@@ -30,10 +30,3 @@ insert into radiology_record values(record_id_seq.nextval, 777777, 111111, 22222
 insert into radiology_record values(record_id_seq.nextval, 999999, 444444, 333333, 'science', to_date('2002-10-31', 'YYYY-MM-DD'), to_date('2002-11-12', 'YYYY-MM-DD'), 'broken leg', 'splint the bone');
 
 
-CREATE INDEX descriptionIndex ON radiology_record(description) INDEXTYPE IS CTXSYS.CONTEXT;
-
-CREATE INDEX diagnosisIndex ON radiology_record(diagnosis) INDEXTYPE IS CTXSYS.CONTEXT;
-
-CREATE INDEX firstNameIndex On persons(first_name) INDEXTYPE IS CTXSYS.CONTEXT;
-
-CREATE INDEX lastNameIndex On persons(last_name) INDEXTYPE IS CTXSYS.CONTEXT;

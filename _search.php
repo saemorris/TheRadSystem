@@ -143,6 +143,8 @@ if (isset($_POST['search'])) {
 				$i = $i + 1;
 				$query .= "CONTAINS(p.last_name, '$word', $i) > 0 OR ";
 				$i = $i + 1;
+				$query .= "CONTAINS(r.test_type, '$word', $i) > 0 OR ";
+				$i = $i + 1; 
 			}
 			$query = substr_replace($query, '', -3, 2);
 
