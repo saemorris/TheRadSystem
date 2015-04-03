@@ -132,6 +132,8 @@ if (isset($_POST['changeinfo'])) {
 				<input name="id" type="hidden" value="<?php echo $person; ?>"/>
 			</form>
 			
+			<p><a href="account.php">&lt; Back</a></p>
+			
 		<?php } else {
 				echo "<p>Database state error: Unable to find user info</p>";
 				}
