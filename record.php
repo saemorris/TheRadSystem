@@ -21,6 +21,7 @@ $default = "displayImage.php?id=$id&size=";
 		</script>
 	</head>
 	<body>
+		<p><a href='search.php'>Home</a></p>
 		<?php
 		require("_database.php");
 		

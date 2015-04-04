@@ -108,3 +108,5 @@ CREATE INDEX lastNameIndex ON persons(last_name) INDEXTYPE IS CTXSYS.CONTEXT;
  */
  INSERT INTO persons values (000000, 'admin', 'admin', 'admin', 'admin', 'admin');
  INSERT INTO users values ('admin', 'admin', 'a', '0', to_date('2015-04-02', 'YYYY-MM-DD')); 
+
+commit;
