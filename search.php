@@ -7,6 +7,7 @@ require_once('session.php');
     <head>
         <title>Search </title>
         <link rel="stylesheet" href="searchpage.css">
+        <a href="account.php">My Account</a>
         <a href="logout.php">Logout</a>
  
         <!-- if the user is an admin, give them the optin to upload a record -->
