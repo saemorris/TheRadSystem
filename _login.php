@@ -24,11 +24,12 @@ if (isset($_POST['login'])) {
 		require ('_database.php');
 		$user = $_POST['user'];
 		$pass = $_POST['pass'];
-		// <-- Bad.
 
-		$query = "SELECT user_name, class, person_id FROM users WHERE user_name = '$user' AND password = '$pass'";
+		$query = "SELECT user_name, class, person_id FROM users WHERE user_name = :username AND password = :password";
 		
 		$statement = oci_parse($connection, $query);
+		oci_bind_by_name($statement, ':username', $user);
+		oci_bind_by_name($statement, ':password', $pass);
 		$results = oci_execute($statement);
 
 		// Did we get a valid result?

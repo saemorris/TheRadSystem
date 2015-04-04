@@ -12,7 +12,7 @@ requireUserClass('a');
 		</p>
 		<div>
 			<form id="searchform" required="1" name="search_users" method="get" action="<?php $PHP_SELF ?>" >
-				<input type="text" name="q" />
+				<input type="text" name="q" value="<?php echo $_GET['q']; ?>" />
 				<input type="submit" value="Search"  />
 			</form>
 		</div>

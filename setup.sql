@@ -11,6 +11,7 @@ DROP TABLE users;
 DROP TABLE persons;
 DROP SEQUENCE record_id_seq;
 DROP SEQUENCE image_id_seq;
+DROP SEQUENCE person_id_seq;
 
 /*
  *  To store the personal information
