@@ -29,4 +29,4 @@ insert into family_doctor values(444444, 999999);
 insert into radiology_record values(record_id_seq.nextval, 777777, 111111, 222222, 'intuition', to_date('1982-09-27', 'YYYY-MM-DD'), to_date('1982-10-28', 'YYYY-MM-DD'), 'broken arm bone', 'remove all the bones in that arm');
 insert into radiology_record values(record_id_seq.nextval, 999999, 444444, 333333, 'science', to_date('2002-10-31', 'YYYY-MM-DD'), to_date('2002-11-12', 'YYYY-MM-DD'), 'broken leg', 'splint the bone');
 
-
+commit;

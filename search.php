@@ -4,7 +4,7 @@ require_once('session.php');
 
 <!DOCTYPE html>
 <html>
-    <head>
+    <body>
         <title>Search </title>
         <link rel="stylesheet" href="searchpage.css">
         <a href="UserDocumentation.html">Help</a>
@@ -67,8 +67,6 @@ require_once('session.php');
 	        	  	
 			<hr>
         </form>
-    </head>
-    <body>
 
 		<?php
 		require('_search.php');
