@@ -4,7 +4,7 @@ require_once('session.php');
 
 <!DOCTYPE html>
 <html>
-    <head>
+    <body>
         <title>Search </title>
         <link rel="stylesheet" href="searchpage.css">
         <a href="UserDocumentation.html">Help</a>
@@ -32,6 +32,12 @@ require_once('session.php');
 	                        
 	                        <td class="prompt_field">To:</td>
 	                        <td class="field"><input type="date" name="dateQueryTo" /></td>
+	                        <td class="field">
+	                        	<select name="orderBy">
+	                        		<option selected value="ASC">Ascending</option>
+	                        		<option value="DESC">Descending</option>
+	                        	</select>
+	                        </td>
 	                      	<?php echo "<p id=\"message\" class=\"$msg_class\">$message</p>"?>
 	                    </tr>
 	                    <tr>
@@ -67,8 +73,6 @@ require_once('session.php');
 	        	  	
 			<hr>
         </form>
-    </head>
-    <body>
 
 		<?php
 		require('_search.php');

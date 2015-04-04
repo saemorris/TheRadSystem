@@ -1,7 +1,7 @@
 <?php 
 
 //display a home button to the user to take them back to the home page
-echo "<a href='search.php'>Home</a>";
+echo "<p><a href='search.php'>Home</a></p>";
 
 // Source: http://www.htmlgoodies.com/beyond/php/article.php/3877766/Web-Developer-How-To-Upload-Images-Using-PHP.htm
 
@@ -64,8 +64,6 @@ $regular_lob = oci_new_descriptor($connection, OCI_D_LOB);
 $thumbnail_lob = oci_new_descriptor($connection, OCI_D_LOB);
 
 $record_id = (int) $_POST['record_id'];
-echo $record_id;
-
 
 $query="INSERT INTO pacs_images (record_id, image_id, thumbnail, regular_size, full_size) VALUES 
 ($record_id, image_id_seq.nextval, EMPTY_BLOB(), EMPTY_BLOB(), EMPTY_BLOB()) RETURNING 
@@ -163,4 +161,7 @@ function error($error, $location, $seconds = 5) {
 		"</H1>\n" +
 		"</BODY></HTML>");
 }
+
+echo "<p><a href='record.php?id=$record_id'>&lt; Back</a></p>"
+
 ?> 
