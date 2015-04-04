@@ -122,5 +122,6 @@ $default = "displayImage.php?id=$id&size=";
 		oci_close($connection);
 		
 		?>
+		<a href="uploadImage.php?record_id=<?php echo $id?>">Upload New Image</a>
 	</body>
 </html>

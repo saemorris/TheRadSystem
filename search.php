@@ -32,6 +32,12 @@ require_once('session.php');
 	                        
 	                        <td class="prompt_field">To:</td>
 	                        <td class="field"><input type="date" name="dateQueryTo" /></td>
+	                        <td class="field">
+	                        	<select name="orderBy">
+	                        		<option selected value="ASC">Ascending</option>
+	                        		<option value="DESC">Descending</option>
+	                        	</select>
+	                        </td>
 	                      	<?php echo "<p id=\"message\" class=\"$msg_class\">$message</p>"?>
 	                    </tr>
 	                    <tr>

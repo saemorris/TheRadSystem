@@ -19,11 +19,12 @@ if (isset($_POST['search'])) {
 			// query the database for records in the specified date range
 			$startDate = $_POST['dateQueryFrom'];
 			$endDate = $_POST['dateQueryTo'];
-			$query = "SELECT i.image_id, r.record_id, r.patient_id, p.first_name, p.last_name, r.doctor_id, r.radiologist_id,
-				r.test_type, r.prescribing_date, r.test_date, r.diagnosis, r.description	FROM family_doctor fd, radiology_record r, 
-				persons p, pacs_images i WHERE r.patient_id = p.person_id AND r.record_id = i.record_id AND 
-				((prescribing_date BETWEEN to_date('$startDate', 'YYYY-MM-DD') AND to_date('$endDate', 'YYYY-MM-DD')) 
-				OR (test_date BETWEEN to_date('$startDate', 'YYYY-MM-DD') AND to_date('$endDate', 'YYYY-MM-DD'))) ";
+			$query = "SELECT DISTINCT null as rank, image_id, r.record_id, r.patient_id, p.first_name, p.last_name, r.doctor_id,
+							r.radiologist_id, r.test_type, r.prescribing_date, r.test_date, r.diagnosis, r.description
+						FROM (radiology_record r inner join persons p on r.patient_id = p.person_id)
+							left join pacs_images i on r.record_id = i.record_id, family_doctor fd 
+						WHERE ((prescribing_date BETWEEN to_date('$startDate', 'YYYY-MM-DD') AND to_date('$endDate', 'YYYY-MM-DD')) 
+							OR (test_date BETWEEN to_date('$startDate', 'YYYY-MM-DD') AND to_date('$endDate', 'YYYY-MM-DD')))";
 				
 			// patient can only view his/her records
 			if ($class == "p") {
@@ -40,56 +41,12 @@ if (isset($_POST['search'])) {
 			echo "<b>Search results for: </b>";
 			echo $startDate . " to " . $endDate;
 			echo "<p>";
+			
+			$query .= " ORDER BY prescribing_date, record_id ". $_POST['orderBy'];
 
 			$statement = oci_parse($connection, $query);
 
 			$results = oci_execute($statement);
-
-			// Did we get a valid result?
-			if ($results) {
-				// display the results
-				echo "<table border='1' cellspacing=0>";
-
-				// get the number of fields in the table
-				$numCols = oci_num_fields($statement);
-
-				// display column headers
-				echo "<tr>";
-				for ($i = 1; $i <= $numCols; $i++) {
-					$column_name = oci_field_name($statement, $i);
-
-					echo "<th>$column_name</th>";
-				}
-				echo "</tr>";
-
-				
-				// display the rows found for the specified date range
-				while ($row = oci_fetch_array($statement, OCI_ASSOC + OCI_RETURNS_NULLS)) {
-					$isFirst = True;
-					echo "<tr>";
-					foreach ($row as $item) {
-						if ($isFirst) {
-							echo "<td> <img src='displayImage.php?size=0&id=$item' /> </td>";	
-							$isFirst= False;	
-						} else {
-						
-							echo "<td>" . ($item !== null ? htmlentities($item, ENT_QUOTES) : "&nbsp;") . "</td>";
-						}
-					}
-					echo "</tr>";
-				}
-				echo "</table>";
-
-			} else {
-				// No.
-				// Inform the user
-				$message = 'No records for date range';
-				$msg_class = 'error';
-			}
-
-			// Clean up database objects
-			oci_free_statement($statement);
-			oci_close($connection);
 
 		} else {
 			// key word search
@@ -104,27 +61,7 @@ if (isset($_POST['search'])) {
 			}
 			echo "<p>";
 
-			// display the headers of the table
-			echo "<table border='1' cellspacing=0>";
-
-			// display column headers
-			echo "<tr>";
-			echo "<th>Rank</th>";
-			echo "<th>Thumbnail</th>";
-			echo "<th>Record Id</th>";
-			echo "<th>Patient Id</th>";
-			echo "<th>First Name</th>";
-			echo "<th>Last Name</th>";
-			echo "<th>Doctor Id</th>";
-			echo "<th>Radiologist Id</th>";
-			echo "<th>Test Type</th>";
-			echo "<th>Prescribing Date</th>";
-			echo "<th>Test Date</th>";
-			echo "<th>Diagnosis</th>";
-			echo "<th>Description</th>";
-			echo "</tr>";
-
-			$query = "i.image_id, r.record_id, r.patient_id, p.first_name, p.last_name, r.doctor_id, 
+			$query = "image_id, r.record_id, r.patient_id, p.first_name, p.last_name, r.doctor_id, 
 								r.radiologist_id, r.test_type, r.prescribing_date, r.test_date, r.diagnosis, r.description 
 								FROM (radiology_record r inner join persons p on r.patient_id = p.person_id)
 									 left join pacs_images i on r.record_id = i.record_id, 
@@ -174,24 +111,54 @@ if (isset($_POST['search'])) {
 			
 			//Order the results by the rank
 			$query = "SELECT * FROM (SELECT DISTINCT 6*($nameFreq) + 3*($diagnosisFreq) + 3*($descFreq) as rank, $query)
-				 ORDER BY rank DESC"; 
+				 ORDER BY rank, record_id DESC"; 
 			
 			$statement = oci_parse($connection, $query);
 
 			$results = oci_execute($statement);
 
+		}
+
+		// Did we get a valid result?
+		if ($results) {
+			
+			// display the results
+			echo "<table border='1' cellspacing=0>";
+
+			// display column headers
+			echo "<tr>";
+			echo "<th>Rank</th>";
+			echo "<th>Thumbnail</th>";
+			echo "<th>Record Id</th>";
+			echo "<th>Patient Id</th>";
+			echo "<th>First Name</th>";
+			echo "<th>Last Name</th>";
+			echo "<th>Doctor Id</th>";
+			echo "<th>Radiologist Id</th>";
+			echo "<th>Test Type</th>";
+			echo "<th>Prescribing Date</th>";
+			echo "<th>Test Date</th>";
+			echo "<th>Diagnosis</th>";
+			echo "<th>Description</th>";
+			echo "</tr>";
+			
 			// display the rows found with matching keywords
 			$num_fields = -1;
+			$last_id = -1;
 			while ($row = oci_fetch_array($statement, OCI_ASSOC + OCI_RETURN_NULLS)) {
 				$field = 0;
 				echo "<tr>";
 				foreach ($row as $item) {
-					if ($field==1) {
-							if ($item === null) {
-								echo '<td></td>';
-							} else {
-								echo "<td> <img src='displayImage.php?size=0&id=$item' /> </td>\n";	
-							}	
+					if ($field===1) {
+						// this is thumbnails
+						if ($item === null) {
+							echo '<td></td>';
+						} else {
+							echo "<td> <img width='50%' src='displayImage.php?size=0&id=$item' /> </td>\n";	
+						}
+					} else if ($field === 2) {
+						// record id
+						echo "<td><a target='_blank' href=record.php?id=$item>" . ($item !== null ? htmlentities($item, ENT_QUOTES) : "&nbsp;") . "</a></td>\n";
 					} else {
 						echo "<td>" . ($item !== null ? htmlentities($item, ENT_QUOTES) : "&nbsp;") . "</td>\n";
 					}
@@ -200,7 +167,18 @@ if (isset($_POST['search'])) {
 				echo "</tr>";
 			}
 			echo "</table>";
+	
+		} else {
+			// No.
+			// Inform the user
+			$message = 'No records for date range';
+			$msg_class = 'error';
 		}
+	
+		// Clean up database objects
+		oci_free_statement($statement);
+		oci_close($connection);
+
 	}
 }
 ?>
