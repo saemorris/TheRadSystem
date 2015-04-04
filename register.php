@@ -8,15 +8,17 @@ if (isset($_POST['register'])) {
 	require('_database.php');
 	
 	// Check username not in user
-	$query = 'SELECT count(*) AS in_use FROM users WHERE user_name = :user_name';
+	$query = 'SELECT count(*) AS in_use FROM users, persons
+			WHERE users.person_id = persons.person_id AND (user_name = :user_name OR email = :email)';
 	$statement = oci_parse($connection, $query);
 	oci_bind_by_name($statement, ':user_name', $_POST['user_name']);
+	oci_bind_by_name($statement, ':email', $_POST['email']);
 	
 	oci_execute($statement);
 	oci_fetch($statement);
 	
 	if (oci_result($statement, 'IN_USE') > 0) {
-		$error_msg = 'Username already in use';
+		$error_msg = 'Username or email already in use';
 		oci_free_statement($statement);
 		oci_close($connection);
 	} else {
